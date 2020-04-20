@@ -1,0 +1,4 @@
+services:
+  pathauto_dryrun.generator:
+    class: Drupal\pathauto_dryrun\PathautoDryrun
+    arguments: ['@config.factory', '@module_handler', '@token', '@pathauto.alias_cleaner', '@pathauto.generator']

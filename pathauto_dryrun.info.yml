@@ -1,0 +1,9 @@
+name : 'Pathauto Dryrun'
+description : 'Provides method to return patterned alias string and do nothing else.'
+core: 8.x
+core_version_requirement: ^8 || ^9
+type: module
+dependencies:
+  - pathauto
+version: 8.x-1.0-alpha1
+
