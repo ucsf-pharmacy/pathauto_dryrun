@@ -75,7 +75,10 @@ class PathautoDryrun {
   }
 
   /**
-   * {@inheritdoc}
+   * Generates an alias according to Pathauto settings and patterns.
+   *
+   * @param Drupal\Core\Entity\EntityInterface $entity
+   * @return string
    */
   public function getAlias(EntityInterface $entity) {
     // Retrieve and apply the pattern for this content type.
