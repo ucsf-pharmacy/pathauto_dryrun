@@ -45,14 +45,14 @@ class PathautoDryrun {
   protected $aliasCleaner;
 
   /**
-   * The alias cleaner.
+   * The pathauto generator.
    *
    * @var \Drupal\pathauto\PathautoGeneratorInterface
    */
   protected $pathautoGenerator;
 
   /**
-   * Creates a new PathautoLite manager.
+   * Creates a new PathautoDryrun object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
@@ -79,13 +79,16 @@ class PathautoDryrun {
    *
    * @param Drupal\Core\Entity\EntityInterface $entity
    * @return string
+   *
+   * This is largely code copied from Pathauto generator.
+   * @see Drupal\pathauto\PathautoGenerator::createEntityAlias().
    */
   public function getAlias(EntityInterface $entity) {
     // Retrieve and apply the pattern for this content type.
     $pattern = $this->pathautoGenerator->getPatternByEntity($entity);
     if (empty($pattern)) {
       // No pattern? Do nothing (otherwise we may blow away existing aliases...)
-      return NULL;
+      return '';
     }
 
     $config = $this->configFactory->get('pathauto.settings');
@@ -120,7 +123,7 @@ class PathautoDryrun {
       'clear' => TRUE,
       'callback' => [$this->aliasCleaner, 'cleanTokenValues'],
       'langcode' => $langcode,
-      'pathauto_lite' => TRUE,
+      'pathauto_dryrun' => TRUE,
     ], new BubbleableMetadata());
 
     // Check if the token replacement has not actually replaced any values. If
@@ -128,7 +131,7 @@ class PathautoDryrun {
     // @see token_scan()
     $pattern_tokens_removed = preg_replace('/\[[^\s\]:]*:[^\s\]]*\]/', '', $pattern->getPattern());
     if ($alias === $pattern_tokens_removed) {
-      return NULL;
+      return '';
     }
 
     $alias = $this->aliasCleaner->cleanAlias($alias);
@@ -139,7 +142,7 @@ class PathautoDryrun {
 
     // If we have arrived at an empty string, discontinue.
     if (!mb_strlen($alias)) {
-      return NULL;
+      return '';
     }
 
     return $alias;
